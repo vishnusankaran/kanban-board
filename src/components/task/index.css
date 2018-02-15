@@ -1,0 +1,16 @@
+.card-container {
+    background: #eaeaea;
+    margin-bottom: 1px;
+    padding: 15px;
+    cursor: pointer;
+}
+
+.card-container:hover {
+    background: #0030ff;
+    color: #fff;
+}
+
+.card-container p {
+    margin: 0;
+    padding: 0;
+}

@@ -1,0 +1,9 @@
+.cta {
+    background: #0030ff;
+    color: #fff;
+    display: block;
+    border: none;
+    width: 100%;
+    padding: 15px;
+    cursor: pointer;
+}
