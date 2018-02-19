@@ -3,7 +3,6 @@ import graphqlHTTP from 'express-graphql';
 import { buildSchema } from 'graphql';
 import setupMongooseConnections from './mongoConnection';
 import BoardModel from '../schema/board';
-import co from 'co';
 
 const schema = buildSchema(`
   type Query {
@@ -66,9 +65,10 @@ const root = {
   createBoard: ({ name }) => {
     return new Promise((resolve, reject) => {
       let newBoard = new BoardModel({ name });
-      newBoard.save((err, doc) => {
+      newBoard.save((err, board) => {
         if(err) reject(err);
-        resolve(doc)
+        console.log("Created Board : ", board);
+        resolve(board)
       });
     });
   },
@@ -78,14 +78,53 @@ const root = {
         { name: boardName },
         { "$push" :{ lists: { name: listName } } },
         { new: true },
-        (err, doc) => {
+        (err, { lists }) => {
           if(err) reject(err);
-          console.log("Updated data ", doc.lists.filter(list => list.name == listName)[0]);
-          resolve(doc.lists.filter(list => list.name == listName)[0]);
+          console.log("Created List : ", lists.filter(list => list.name == listName)[0]);
+          resolve(lists.filter(list => list.name == listName)[0]);
       });
     });
   },
   createTask: ({ input:{ boardName, listName, taskContent } }) => {
+    return new Promise((resolve, reject) => {
+      BoardModel.findOne(
+        { name: boardName },
+        (err, board) => {
+          if(err) reject(err);
+          board.lists.filter(({ name }) => name == listName)[0].tasks.push({ content: taskContent });
+          board.save((err, doc) => {
+            if(err) reject(err);
+            console.log("Created Task : ",doc.lists.filter(({ name }) => name == listName)[0].tasks.filter(task => task.content == taskContent)[0]);
+            resolve(doc.lists.filter(({ name }) => name == listName)[0].tasks.filter(task => task.content == taskContent)[0]);
+          });
+      });
+    });
+  },
+  deleteBoard: ({ name }) => {
+    return new Promise((resolve, reject) => {
+      BoardModel.findOneAndRemove(
+        { name },
+        (err, doc) => {
+          if(err) reject(err);
+          console.log("Deleted Board : ", doc);
+          resolve({name});
+      });
+    });
+  },
+  deleteList: ({ input:{ boardName, listName } }) => {
+    return new Promise((resolve, reject) => {
+      BoardModel.findOneAndUpdate(
+        { name:boardName },
+        { $pull: { lists: { name: listName } } },
+        { new: false },
+        (err, { lists }) => {
+          if(err) reject(err);
+          console.log("Deleted List : ", lists.filter(({ name }) => name == listName )[0]);
+          resolve(lists.filter(({ name }) => name == listName )[0]);
+      });
+    });
+  },
+  deleteTask: ({ input:{ boardName, listName, taskContent } }) => {
     //TODO
   },
   updateBoardName: ({ name }) => {
@@ -97,23 +136,6 @@ const root = {
   updateTask: ({ input:{ boardName, listName, taskContent } }) => {
     //TODO
   },
-  deleteBoard: ({ name }) => {
-    return new Promise((resolve, reject) => {
-      BoardModel.findOneAndRemove(
-        { name },
-        (err, doc) => {
-          if(err) reject(err);
-          console.log("Deleted data ", doc);
-          resolve({name});
-      });
-    });
-  },
-  deleteList: ({ input:{ boardName, listName } }) => {
-    //TODO
-  },
-  deleteTask: ({ input:{ boardName, listName, taskContent } }) => {
-    //TODO
-  }
 };
 const app = express();
 
