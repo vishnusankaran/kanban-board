@@ -24,7 +24,7 @@ const fetchAll = () => {
     });
 };
 
-const addBoard = (name) => {
+const createBoard = (name) => {
     let mutation = `mutation {
         createBoard(name:"${name}"){
             _id
@@ -62,4 +62,67 @@ const deleteBoard = (name) => {
     });
 };
 
-export { fetchAll, addBoard, deleteBoard };
+const createList = (boardName, listName) => {
+    let mutation = `mutation {
+        createList(input: {boardName:"${boardName}", listName:"${listName}"}){
+            _id
+            name
+            tasks {
+                content
+            }
+        }
+    }`;
+    request('http://localhost:3000/graphql', mutation).then(data => {
+        store.dispatch({
+            type: 'CREATE_LIST',
+            data: { ...data.createList, boardName }
+        });
+    });
+};
+
+const deleteList = (boardName, listName) => {
+    let mutation = `mutation {
+        deleteList(input: {boardName:"${boardName}", listName:"${listName}"}){
+            _id
+            name
+        }
+    }`;
+    request('http://localhost:3000/graphql', mutation).then(data => {
+        store.dispatch({
+            type: 'DELETE_LIST',
+            data: { ...data.deleteList, boardName }
+        });
+    });
+};
+
+const createTask = (boardName, listName, taskContent) => {
+    let mutation = `mutation {
+        createTask(input: {boardName:"${boardName}", listName:"${listName}", taskContent:"${taskContent}"}){
+            _id
+            content
+        }
+    }`;
+    request('http://localhost:3000/graphql', mutation).then(data => {
+        store.dispatch({
+            type: 'CREATE_TASK',
+            data: { ...data.createTask, boardName, listName }
+        });
+    });
+};
+
+const deleteTask = (boardName, listName, taskContent) => {
+    let mutation = `mutation {
+        deleteTask(input: {boardName:"${boardName}", listName:"${listName}", taskContent:"${taskContent}"}){
+            _id
+            content
+        }
+    }`;
+    request('http://localhost:3000/graphql', mutation).then(data => {
+        store.dispatch({
+            type: 'DELETE_TASK',
+            data: { ...data.deleteTask, boardName, listName }
+        });
+    });
+};
+
+export { fetchAll, createBoard, deleteBoard, createList, deleteList, createTask, deleteTask };

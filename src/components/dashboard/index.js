@@ -9,7 +9,7 @@ import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import {grey500} from 'material-ui/styles/colors';
 import { Link } from 'react-router-dom';
-import { addBoard, deleteBoard } from '../../actions';
+import { createBoard, deleteBoard } from '../../actions';
 import './index.css';
 
 class Dashboard extends Component {
@@ -31,7 +31,7 @@ class Dashboard extends Component {
 
   addBoard = () => {
     this.toggleModal();
-    addBoard(this.state.listInput);
+    createBoard(this.state.listInput);
   }
 
   deleteBoard = (name) => {
@@ -49,7 +49,7 @@ class Dashboard extends Component {
     return (
       <div className="board-container">
         {
-          boards.length &&
+          boards.length > 0 &&
           boards.map(({ name, _id }) => <Card key={ _id } style={ { overflow: 'auto' } } >
                                           <Link to={`/board/${ _id }`}><CardText style={ { width: '80%', float: 'left' } }>{ name }</CardText></Link>
                                           <IconButton style={ { float: 'right', padding: 12 } } onClick={ () => this.deleteBoard(name) } tooltip='Delete Board'>

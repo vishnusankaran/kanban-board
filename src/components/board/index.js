@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import List from '../list';
+import { createList, deleteList } from '../../actions';
 import './index.css';
 
 class Board extends Component {
@@ -24,9 +27,8 @@ class Board extends Component {
   }
 
   addList = () => {
-    // this.setState(prev => ({ lists: [ ...prev.lists, { id: Math.random(), name: this.state.listInput, cards:[] } ] }),() => {
-    //   this.toggleModal();
-    // });
+    this.toggleModal();
+    createList(this.props.name, this.state.listInput);
   }
 
   handleInput = (e) => {
@@ -40,15 +42,14 @@ class Board extends Component {
     return (
       <div className="board-container">
         {
-          lists.length &&
-          lists.map(list => <List key={ list.id } { ...list } />)
+          lists.length > 0 &&
+          lists.map(list => <List boardName={ this.props.name } key={ list._id } { ...list } />)
         }
-        <RaisedButton
-          primary
-          label='+ ADD LIST'
-          onClick={ this.handleModal }
-          style={ { width: '300px', display: 'inline-block', verticalAlign:'middle' } } />
-
+        <FloatingActionButton
+          style={ { position: 'absolute', right: '50px', bottom: '50px' } }
+          onClick={ this.handleModal }>
+            <ContentAdd />
+        </FloatingActionButton>
         <Dialog
           modal={ true }
           open={ showModal }

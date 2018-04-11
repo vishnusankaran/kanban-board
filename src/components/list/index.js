@@ -3,6 +3,7 @@ import Task from '../task';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
+import { createTask, deleteTask } from '../../actions';
 import './index.css';
 
 class List extends Component {
@@ -10,13 +11,13 @@ class List extends Component {
     super(props);
     this.state = {
       showModal: false,
-      tasks: props.cards,
+      tasks: props.tasks,
       taskInput: ''
     };
   }
 
   componentWillReceiveProps(newProps) {
-    this.setState({ tasks: newProps.cards });
+    this.setState({ tasks: newProps.tasks });
   }
 
   handleModal = () => {
@@ -31,10 +32,9 @@ class List extends Component {
     this.setState({ taskInput: e.target.value });
   }
 
-  addTask = () => {debugger;
-    this.setState(prev => ({ tasks: [ { content: this.state.taskInput }, ...prev.tasks ] }), () => {
-      this.toggleModal();
-    });
+  addTask = () => {
+    this.toggleModal();
+    createTask(this.props.boardName, this.props.name, this.state.taskInput);
   }
 
   render() {
@@ -50,7 +50,7 @@ class List extends Component {
           <div className="list-content">
             {
               tasks.length > 0 &&
-              tasks.map(card => <Task key={ card.id || Math.random() } { ...card } />)
+              tasks.map(card => <Task key={ card._id || Math.random() } { ...card } />)
             }
             <RaisedButton fullWidth primary label='+ ADD CARD' onClick={ this.handleModal } />
           </div>
