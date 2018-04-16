@@ -13,14 +13,15 @@ class Task extends Component {
     return (
       <Card>
         <CardText>
-          { content }
-
+          <span style={ { padding: '5px 0' } }>{ content }</span>
           <IconMenu
-            iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+            style={ { float: 'right' } }
+            iconButtonElement={<MoreVertIcon />}
             anchorOrigin={{horizontal: 'right', vertical: 'top'}}
             targetOrigin={{horizontal: 'right', vertical: 'top'}}
           >
             <MenuItem primaryText="Edit" />
+            <MenuItem primaryText="Delete" />
           </IconMenu>
         </CardText>
       </Card>

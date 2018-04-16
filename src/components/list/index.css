@@ -1,8 +1,16 @@
 .list-container {
-    float: left;
+    display: inline-block;
     width: 300px;
+    height: calc(100vh - 134px);
     margin-right: 30px;
+    vertical-align: top;
 }
 .list-container header {
     padding: 15px;
+}
+.list-container .list-content {
+    max-height: calc(100vh - 258px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin-bottom: 20px;
 }

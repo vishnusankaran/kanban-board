@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from 'react';
+import AppBar from 'material-ui/AppBar';
 import Task from '../task';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
+import { Card, CardText } from 'material-ui/Card';
 import { createTask, deleteTask } from '../../actions';
 import './index.css';
 
@@ -47,13 +49,13 @@ class List extends Component {
           <header>
             { name }
           </header>
-          <div className="list-content">
+          <Card className="list-content">
             {
               tasks.length > 0 &&
               tasks.map(card => <Task key={ card._id || Math.random() } { ...card } />)
             }
-            <RaisedButton fullWidth primary label='+ ADD CARD' onClick={ this.handleModal } />
-          </div>
+          </Card>
+          <RaisedButton fullWidth primary label='+ ADD CARD' onClick={ this.handleModal } />
         </section>
         <Dialog
           modal={ true }

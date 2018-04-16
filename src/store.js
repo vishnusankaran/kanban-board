@@ -13,7 +13,7 @@ let store = createStore((state = {}, action) => {
       return state;
     case 'DELETE_BOARD':
       return Object.assign({}, state, { boards: [ ...state.boards.filter( board => board.name !== action.data.name ) ] });
-    case 'CREATE_LIST':debugger;
+    case 'CREATE_LIST':
       let updatedBoard1 = state.boards.filter( board => board.name === action.data.boardName )[0];
       updatedBoard1.lists.push({ _id: action.data._id, name: action.data.name, tasks: [] });
       return Object.assign({}, state, { boards: [ ...state.boards.filter( board => board.name !== action.data.boardName ), updatedBoard1 ] });
