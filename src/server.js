@@ -128,7 +128,18 @@ const root = {
     });
   },
   deleteTask: ({ input:{ boardName, listName, taskContent } }) => {
-    //TODO
+    return new Promise((resolve, reject) => {
+      BoardModel.findOneAndUpdate(
+        { name:boardName, 'lists.name': listName },
+        { $pull: { 'lists.$.tasks': { content: taskContent } } },
+        { new: false },
+        (err, { lists }) => {
+          if(err) reject(err);
+          let task = lists.filter(({ name }) => name == listName )[0].tasks.filter(({ content }) => content === taskContent)[0];
+          console.log("Deleted Task : ", task);
+          resolve(task);
+      });
+    });
   },
   updateBoardName: ({ name }) => {
     //TODO

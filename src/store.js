@@ -32,7 +32,7 @@ let store = createStore((state = {}, action) => {
     case 'UPDATE_TASK':
       return state;
     case 'DELETE_TASK':
-      let updatedBoard4 = state.boards.filter( board => board.name === action.data.boardName )[0].lists;
+      let updatedBoard4 = state.boards.filter( board => board.name === action.data.boardName )[0];
       let updatedList2 = updatedBoard4.lists.filter(list => list.name === action.data.listName)[0];
       updatedList2.tasks = updatedList2.tasks.filter(task => task.content !== action.data.content);
       updatedBoard4.lists = [ ...updatedBoard4.lists.filter(list => list.name !== action.data.listName), updatedList2 ];

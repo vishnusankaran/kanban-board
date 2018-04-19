@@ -4,11 +4,12 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import { deleteTask } from '../../actions';
 import './index.css';
 
 class Task extends Component {
   render() {
-    let { content } = this.props;
+    let { content, boardName, listName } = this.props;
 
     return (
       <Card>
@@ -20,8 +21,7 @@ class Task extends Component {
             anchorOrigin={{horizontal: 'right', vertical: 'top'}}
             targetOrigin={{horizontal: 'right', vertical: 'top'}}
           >
-            <MenuItem primaryText="Edit" />
-            <MenuItem primaryText="Delete" />
+            <MenuItem primaryText="Delete" onClick={() => { deleteTask(boardName, listName, content) }} />
           </IconMenu>
         </CardText>
       </Card>

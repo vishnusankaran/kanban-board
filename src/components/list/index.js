@@ -5,7 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import { Card, CardText } from 'material-ui/Card';
-import { createTask, deleteTask } from '../../actions';
+import { createTask } from '../../actions';
 import './index.css';
 
 class List extends Component {
@@ -52,7 +52,7 @@ class List extends Component {
           <Card className="list-content">
             {
               tasks.length > 0 &&
-              tasks.map(card => <Task key={ card._id || Math.random() } { ...card } />)
+              tasks.map(card => <Task key={ card._id || Math.random() } { ...card } boardName={this.props.boardName} listName={ this.props.name } />)
             }
           </Card>
           <RaisedButton fullWidth primary label='+ ADD CARD' onClick={ this.handleModal } />
